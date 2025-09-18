@@ -21,7 +21,7 @@ fi
 
 echo "creating archive"
 if [ "${IGNORE_FAILED_READ}" == "true" ]; then
-  tar -zcvf --ignore-failed-read "${TMP_FILE_NAME}" "${TARGET}"
+  tar --ignore-failed-read -zcvf "${TMP_FILE_NAME}" "${TARGET}"
 else
   tar -zcvf "${TMP_FILE_NAME}" "${TARGET}"
 fi
