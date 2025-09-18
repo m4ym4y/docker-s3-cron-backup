@@ -1,11 +1,10 @@
 # Docker S3 Cron Backup
 
-[:star: Docker Hub](https://hub.docker.com/r/peterrus/s3-cron-backup/)
-[:star: Github](https://github.com/peterrus/docker-s3-cron-backup)
+[Fork of https://github.com/peterrus/docker-s3-cron-backup]
 
 ## What is it?
 
-> ℹ️ I am currently not actively maintaining this container. Feel free to fork it, modify it locally or use it as inspiration.
+(README from [original repo](https://github.com/peterrus/docker-s3-cron-backup) with extra variables documented)
 
 A modest little container image that periodically backups any volume mounted to `/data` to S3-compatible storage in the form of a timestamped, gzipped, tarball. By default this container is configured to work with Amazon S3 but it should work with most S3-backends.
 
@@ -31,7 +30,9 @@ And the following optional environment variables:
 - `TARGET`: (Optional, defaults to `/data`) Specifies the target location to backup. Useful for sidecar containers and to filter files.
   - Example with multiple targets: `TARGET="/var/log/*.log /var/lib/mysql/*.dmp"` (Arguments will be passed to `tar`).
 - `WEBHOOK_URL`: (Optional) URL to ping after successful backup, e.g. [StatusCake push monitoring](https://www.statuscake.com/kb/knowledge-base/what-is-push-monitoring/) or [healthchecks.io](https://healthchecks.io)
-
+- `GPG_PASSPHRASE`: (Optional) If provided, enabled GPG symmetric encryption on the backup before uploading and local backup, using the given passphrase.
+- `GPG_CIPHER_ALGO`: (Optional, default `AES256`) Symmetric cipher algo to encrypt backup with
+- `LOCAL_BACKUP_DIR`: (Optional) Local directory (in container's filesystem) to back up file
 
 ### Directly via Docker
 ```
@@ -83,13 +84,3 @@ From a security perspective it is often preferable to create a dedicated IAM use
     ]
 }
 ```
-
-## It doesn't do X or Y!
-
-Let this container serve as a starting point and an inspiration! Feel free to modify it locally or fork it you want to share your changes with others.
-
-## Contributors
-- [jayesh100](https://github.com/jayesh100)
-- [ifolarin](https://github.com/ifolarin)
-- [stex79](https://github.com/stex79)
-- [f213](https://github.com/f213)

@@ -8,7 +8,8 @@ source .env
 S3_STORAGE_CLASS=${S3_STORAGE_CLASS:-STANDARD}
 
 # generate file name for tar
-FILE_NAME=/tmp/${BACKUP_NAME}-$(date "+%Y-%m-%d_%H-%M-%S").tar.gz
+FILE_BASENAME="${BACKUP_NAME:-backup}-$(date "+%Y-%m-%d_%H-%M-%S").tar.gz"
+TMP_FILE_NAME="/tmp/${FILE_BASENAME}"
 
 # Check if TARGET variable is set
 if [ -z "${TARGET}" ]; then
@@ -18,14 +19,30 @@ else
     echo "TARGET env var is set"
 fi
 
+echo "creating archive"
+tar -zcvf "${FILE_NAME}" "${TARGET}"
+
+# encrypt if passphrase provided
+if [ -z "${GPG_PASSPHRASE}" ]; then
+  FILE_NAME="${TMP_FILE_NAME}"
+else
+  echo "${GPG_PASSPHRASE}" | gpg --batch --yes --passphrase-fd 0 --symmetric --cipher-algo "${GPG_CIPHER_ALGO:-AES256}" --output "${TMP_FILE_NAME}.enc" "${TMP_FILE_NAME}"
+  rm "${TMP_FILE_NAME}"
+  FILE_NAME="${TMP_FILE_NAME}.enc"
+  FILE_BASENAME="${FILE_BASENAME}.enc"
+fi
+
+# backup local if enabled
+if [ -n "${LOCAL_BACKUP_DIR}" ]; then
+  cp "${FILE_NAME}" "${LOCAL_BACKUP_DIR}/${FILE_BASENAME}"
+fi
+
 if [ -z "${S3_ENDPOINT}" ]; then
   AWS_ARGS=""
 else
   AWS_ARGS="--endpoint-url ${S3_ENDPOINT}"
 fi
 
-echo "creating archive"
-tar -zcvf "${FILE_NAME}" "${TARGET}"
 echo "uploading archive to S3 [${FILE_NAME}, storage class - ${S3_STORAGE_CLASS}]"
 aws s3 ${AWS_ARGS} cp --storage-class "${S3_STORAGE_CLASS}" "${FILE_NAME}" "${S3_BUCKET_URL}"
 echo "removing local archive"
