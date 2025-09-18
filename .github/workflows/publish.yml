@@ -15,7 +15,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            peterrus/s3-cron-backup
+            mayeclair/s3-cron-backup
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1

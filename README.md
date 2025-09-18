@@ -11,7 +11,7 @@ A modest little container image that periodically backups any volume mounted to 
 ## Great, but how does it work?
 An Alpine Linux instance runs nothing more than crond with a crontab that contains nothing more than one single entry that triggers the backup script. When this script is run, the volume mounted at `/data` gets tarred, gzipped and uploaded to a S3 bucket. Afterwards the archive gets deleted from the container. The mounted volume, of course, will be left untouched.
 
-I invite you to check out the source of this image, it's rather simple and should be easy to understand. If this isn't the case, feel free to open an issue on [github](https://github.com/peterrus/docker-s3-cron-backup)
+I invite you to check out the source of this image, it's rather simple and should be easy to understand. If this isn't the case, feel free to open an issue on [github](https://github.com/m4ym4y/docker-s3-cron-backup)
 
 *Pull requests welcome*
 
@@ -44,7 +44,7 @@ docker run \
   -e CRON_SCHEDULE="0 * * * *" \
   -e BACKUP_NAME=make-something-up \
   -v /your/awesome/data:/data:ro \
-  peterrus/s3-cron-backup
+  mayeclair/s3-cron-backup
 ```
 
 ### Docker-compose
@@ -54,7 +54,7 @@ version: '3.8'
 
 services:
   my-backup-unit:
-    image: peterrus/s3-cron-backup
+    image: mayeclair/s3-cron-backup
     environment:
       - AWS_ACCESS_KEY_ID=SOME8AWS3ACCESS9KEY
       - AWS_SECRET_ACCESS_KEY=sUp3rS3cr3tK3y0fgr34ts3cr3cy
