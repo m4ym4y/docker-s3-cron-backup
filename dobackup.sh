@@ -20,7 +20,7 @@ else
 fi
 
 echo "creating archive"
-tar -zcvf "${FILE_NAME}" "${TARGET}"
+tar -zcvf "${TMP_FILE_NAME}" "${TARGET}"
 
 # encrypt if passphrase provided
 if [ -z "${GPG_PASSPHRASE}" ]; then
