@@ -20,7 +20,11 @@ else
 fi
 
 echo "creating archive"
-tar -zcvf "${TMP_FILE_NAME}" "${TARGET}"
+if [ "${IGNORE_FAILED_READ}" == "true" ]; then
+  tar -zcvf --ignore-failed-read "${TMP_FILE_NAME}" "${TARGET}"
+else
+  tar -zcvf "${TMP_FILE_NAME}" "${TARGET}"
+fi
 
 # encrypt if passphrase provided
 if [ -z "${GPG_PASSPHRASE}" ]; then

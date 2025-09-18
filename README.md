@@ -32,7 +32,8 @@ And the following optional environment variables:
 - `WEBHOOK_URL`: (Optional) URL to ping after successful backup, e.g. [StatusCake push monitoring](https://www.statuscake.com/kb/knowledge-base/what-is-push-monitoring/) or [healthchecks.io](https://healthchecks.io)
 - `GPG_PASSPHRASE`: (Optional) If provided, enabled GPG symmetric encryption on the backup before uploading and local backup, using the given passphrase.
 - `GPG_CIPHER_ALGO`: (Optional, default `AES256`) Symmetric cipher algo to encrypt backup with
-- `LOCAL_BACKUP_DIR`: (Optional) Local directory (in container's filesystem) to back up file
+- `LOCAL_BACKUP_DIR`: (Optional) Local directory (in container's filesystem) to back up archive
+- `IGNORE_FAILED_READ`: (Optional) set to `true` to ignore failed reads when creating backup archive
 
 ### Directly via Docker
 ```
