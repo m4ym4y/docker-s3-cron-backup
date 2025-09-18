@@ -21,9 +21,9 @@ fi
 
 echo "creating archive"
 if [ "${IGNORE_FAILED_READ}" == "true" ]; then
-  tar --ignore-failed-read -zcvf "${TMP_FILE_NAME}" "${TARGET}"
+  tar --ignore-failed-read -zcvf "${TMP_FILE_NAME}" "${TARGET}" 1>/dev/null
 else
-  tar -zcvf "${TMP_FILE_NAME}" "${TARGET}"
+  tar -zcvf "${TMP_FILE_NAME}" "${TARGET}" 1>/dev/null
 fi
 
 # encrypt if passphrase provided
@@ -38,7 +38,9 @@ fi
 
 # backup local if enabled
 if [ -n "${LOCAL_BACKUP_DIR}" ]; then
+  echo "creating local backup at ${LOCAL_BACKUP_DIR}/${FILE_BASENAME}"
   cp "${FILE_NAME}" "${LOCAL_BACKUP_DIR}/${FILE_BASENAME}"
+  echo "local backup succeeded"
 fi
 
 if [ -z "${S3_ENDPOINT}" ]; then
